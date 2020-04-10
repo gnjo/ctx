@@ -20,10 +20,11 @@ box,300,20,0,0,#000
 ```
 
 ```
-layer0
-layer1
-layer2
-layer3
+lay0 marge layer
+lay1 base layer
+lay2 effect layer
+lay3 log layer
+lay4 cursor layer
 ```
 ```
 let lay0=ctx(640,480)
