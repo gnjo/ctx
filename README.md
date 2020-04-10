@@ -37,7 +37,11 @@ lay0.ex('full,#000,0,0,pen1')//paint black
 lay0.ex('full,#fff0,0,0,pen1')//paint transparent
 lay0.put(lay1,lay2,lay3)
 
-
+lay0.ex('full,#f00,0,0,pen1')
+wait>2
+lay0.ex('full,#0f0,0,0,pen1')
+wait>2
+lay0.ex('full,#00f,0,0,pen1')
 
 ```
 
