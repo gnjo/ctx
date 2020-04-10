@@ -32,7 +32,7 @@ let laybase=ctx(640,480)
 let layef=ctx(640,480)
 let laylog=ctx(640,480)
 
-lay0.pen('#000,#111,14px monospace')
+lay0.pen(pen1,#000,14 monospace')
 lay0.ex('full,#000,0,0,pen1')//paint black
 lay0.ex('full,#fff0,0,0,pen1')//paint transparent
 lay0.put(lay1,lay2,lay3)
