@@ -35,6 +35,7 @@ let laylog=ctx(640,480)
 lay0.pen('pen1,#000,14 monospace')
 lay0.ex('full,#000,0,0,pen1')//paint black
 lay0.ex('full,#fff0,0,0,pen1')//paint transparent
+lay0.ef('txt,9,#fff,0,0,pen1','color,#f00|pos,3,5',14)
 lay0.put(lay1,lay2,lay3)
 
 
