@@ -1,4 +1,40 @@
 # ctx
+
+
+```
+var pens={};//pens is share
+
+function entry(w,h){
+ let o={}
+ o.pen=(str)=>{
+  let a=str.split(',').slice(1),name=a[0];
+  pens[name]=a
+  return o;
+ }
+ o.ex=(str)=>{
+  str.split('\n').map(d=>{
+   let a=str.split(',').slice(1),cmd=a[0];
+   return o[cmd].apply(o,a)
+  })
+  return o;
+ }
+ o.ef=(str)=>{}
+ o.put=(...ary)=>{
+  let w=o.canvas.width,h=o.canvas.height
+  ary.map(d=>o.putImageData(d.getImageData(0,0,w,h) ,0,0) )
+  return o;
+ }
+ ;
+ let canvas=document.createElement('canvas')
+ canvas.width=w,canvas.height=h
+ let ctx=canvas.getContext('2d')
+ return Object.assign(ctx,o)
+}
+root.ctx=entry;
+```
+
+## memo
+
 ```
 //usage
 $a=12
