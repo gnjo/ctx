@@ -2,8 +2,152 @@
 
 
 ```
-var pens={};//pens is share
+let is={}
+is.string = function(obj){return toString.call(obj) === '[object String]'}
+is.color=(d)=>{
+ if(!is.string(d))return false;
+ return /^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(d)
+}
+is.transparent=(d)=>{
+ if(!is.string(d))return false;
+ return /^transparent$/.test(d)
+}
 
+////
+var pens={};//pens is share
+function topen(name,fillflg){
+ let p={
+ strokeStyle:"transparent"
+ ,fillStyle:"transparent"
+ ,font:"16px 'Almendra SC',monospace"
+ ,textAlign:"left"
+ ,textBaseline:"top"
+ }
+ if(is.color(name))return p[(fillflg)?"fillStyle":"strokeStyle"]=name,p //
+ //else
+ let ary=pens[name]
+ p[(fillflg)?"fillStyle":"strokeStyle"]=ary[0]
+ p.font=ary[1]
+ return p;
+}
+//////////////////////
+
+
+o._img=(src,x0,y0,pen,anim)=>{
+ let ctx=o;
+ let d=new Image(); d.src=src;
+ let w=d.nativeWidth,h=d.nativeHeight
+ ctx.drawImage(d,0,0,w,h,x0,y0,w,h)
+ ;
+ return o.needflip=1,ctx.restore(),o;
+}
+
+o._txt=(obj,x0,y0,pen,anim)=>{
+ let ctx=o
+ Object.assign(ctx,pen) //penset
+ ctx.fillText(obj,x0,y0) //native
+ ;
+ return o.needflip=1,ctx.restore(),o;
+}
+o._box=(obj,x0,y0,pen,anim)=>{
+ let ctx=o
+ Object.assign(ctx,pen) //penset
+ is.transparent(pen.fillStyle)?ctx.strokeRect(x0,y0,obj[0],obj[1]):ctx.fillRect(x0,y0,obj[0],obj[1])
+ //ctx.fillRect(x0,y0,obj[0],obj[1]) //native
+ //Object.assign(ctx,fn.clone(o._pen)) //penback
+ ;
+ return o.needflip=1,ctx.restore(),o;
+}
+o._poly=(obj,x0,y0,pen,anim)=>{
+ let ctx=o
+ Object.assign(ctx,pen) //penset
+ ctx.beginPath();
+ ctx.moveTo(obj[0],obj[1]);
+ for(i=2;i<obj.length;i+=2)
+  ctx.lineTo(obj[i],obj[i+1]);
+ 
+ ctx.closePath();
+ if(!is.transparent(pen.fillStyle)) ctx.fill()
+ if(!is.transparent(pen.strokeStyle)) ctx.stroke()
+ //Object.assign(ctx,fn.clone(o._pen)) //penback  ?????
+ ;
+ return o.needflip=1,ctx.restore(),o;
+}
+;
+/*
+//dmg("-9",0,0,"#f26",15)//y=(i*i)/2 //(15).toString(16)
+o.dmg=(obj,x0,y0,pen,anim)=>{
+ let time=anim||15
+ let ary=Array.from({length:time}).map((d,i)=>{
+  let p={strokeStyle:"#000000",fillStyle:"#f26",font:"24px 'Almendra SC', serif",textAlign:"left",textBaseline:"top"}
+  ;
+  p.fillStyle=p.fillStyle+(i).toString(16)
+  return o.txt.bind(null,obj,x0,y0-((time-i)*(time-i) )/3,p,anim)
+ })
+ o.anim.push(ary)
+ return o;
+}
+;
+*/
+o.img=(src,x0,y0,pen,anim)=>{
+ ;
+ return o.img(src,x0,y0,pen,anim)
+}
+;
+o.txt=(obj,x0,y0,pen,anim)=>{
+ return o.txtl(obj,x0,y0,pen,anim)
+}
+o.txtl=(obj,x0,y0,pen,anim)=>{
+ let d=topen(pen,'fill')//fn.clone(o._pen)
+ return o._txt(obj,x0,y0,Object.assign(d, {textAlign:"left"}),anim)
+}
+o.txtr=(obj,x0,y0,pen,anim)=>{
+ let d=topen(pen,'fill')//fn.clone(o._pen)
+ return o._txt(obj,x0,y0,Object.assign(d, {textAlign:"right"}),anim)
+}
+o.txtc=(obj,x0,y0,pen,anim)=>{
+ let d=topen(pen,'fill')//fn.clone(o._pen)
+ return o._txt(obj,x0,y0,Object.assign(d, {textAlign:"center"}),anim)
+}
+
+o.full=()=>{
+ let w=o._canvas.width,h=o._canvas.height
+ return o.box([w,h],0,0,"#000000")
+}
+
+o.box=(obj,x0,y0,pen,anim)=>{
+ let d=topen(pen,'fill')//fn.clone(o._pen)
+ return o._box(obj,x0,y0,d,anim)
+}
+o.boxb=(obj,x0,y0,pen,anim)=>{
+ let d=topen(pen)//fn.clone(o._pen)
+ return o._box(obj,x0,y0,d,anim)
+}
+
+o.poly=(obj,x0,y0,pen,anim)=>{
+ let d=topen(pen,'fill')//fn.clone(o._pen)
+ return o._poly(obj,x0,y0,d,anim)
+}
+o.polyb=(obj,x0,y0,pen,anim)=>{
+ let d=topen(pen)//fn.clone(o._pen)
+ return o._poly(obj,x0,y0,d,anim)
+}
+
+
+//o.img
+//o.txt
+//o.txtl
+//o.txtr
+//o.txtc
+//o.box
+//o.boxb
+//o.full
+//o.poly
+//o.polyb
+//inpd.set(640,480)
+//
+
+///////////////////////
 function entry(w,h){
  let o={}
  o.pen=(str)=>{
