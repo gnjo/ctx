@@ -47,7 +47,14 @@ wait>2
 lay2.ex('full,#00f,0,0,pen1')
 
 ```
+```
+let a=ctx(640,480).ex(`
+img,${recouse},0,0,#000
 
+`)
+a.canvas.id='a',document.body.appendChild(a.canvas)
+
+```
 
 
 
